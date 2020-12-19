@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {Plugins, CameraResultType, Capacitor, FilesystemDirectory, CameraPhoto, CameraSource } from '@capacitor/core';
+import { Plugins, CameraResultType, Capacitor, FilesystemDirectory, CameraPhoto, CameraSource } from '@capacitor/core';
 import { Platform } from '@ionic/angular';
 
 const { Camera, Filesystem, Storage } = Plugins;
@@ -11,10 +11,10 @@ const { Camera, Filesystem, Storage } = Plugins;
 export class PhotoService {
   public photos: Photo[] = [];
   private PHOTO_STORAGE: string = "photos";
-  private platform: Platform;
+  private plt: Platform;
 
-  constructor(platform: Platform) {
-    this.platform = platform;
+  constructor(plt: Platform) {
+    this.plt = plt;
   }
 
   public async loadSaved() {
@@ -23,7 +23,7 @@ export class PhotoService {
     this.photos = JSON.parse(photoList.value) || [];
   
     // Display the photo by reading into base64 format
-    if (!this.platform.is('hybrid')) {
+    if (!this.plt.is('hybrid')) {
       // Display the photo by reading into base64 format
       for (let photo of this.photos) {
         // Read each saved photo's data from the Filesystem
@@ -69,7 +69,7 @@ export class PhotoService {
       directory: FilesystemDirectory.Data
   });
 
-    if (this.platform.is('hybrid')) {
+    if (this.plt.is('hybrid')) {
       // Display the new image by rewriting the 'file://' path to HTTP
             
       return {
@@ -90,7 +90,7 @@ export class PhotoService {
   // Read camera photo into base64 format based on the platform that the app is running on
   private async readAsBase64(cameraPhoto: CameraPhoto) {
     // "hybrid" will detect Cordova or Capacitor
-    if (this.platform.is('hybrid')) {
+    if (this.plt.is('hybrid')) {
       // Read the file into base64 format
       const file = await Filesystem.readFile({
         path: cameraPhoto.path
